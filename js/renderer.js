@@ -10,15 +10,16 @@ Brat.renderer = (() => {
   // Baris terakhir ikut justify kalau config.justifyLast = true.
   // Justify: renggangkan spasi antar kata. Baris satu kata: renggangkan antar huruf.
     // Justify: renggangkan spasi antar kata. Satu kata: tengah.
+    // Justify: tepi kiri dan kanan rata. Baris satu kata: rata kiri.
   function drawLine(ctx, line, y) {
     const words = line.text.split(' ');
+    ctx.textAlign = 'left';
+
     if ((line.last && !justifyLast) || words.length < 2) {
-      ctx.textAlign = 'center';
-      ctx.fillText(line.text, size / 2, y);
+      ctx.fillText(line.text, margin, y);
       return;
     }
 
-    ctx.textAlign = 'left';
     const wordsWidth = words.reduce((sum, w) => sum + ctx.measureText(w).width, 0);
     const gap = (boxSize - wordsWidth) / (words.length - 1);
     let x = margin;
