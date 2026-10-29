@@ -1,88 +1,21 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Brat Image</title>
-<style>
-  body { margin: 0; padding: 24px; font-family: Arial, sans-serif; background: #f2f2f2; color: #111; display: flex; flex-direction: column; align-items: center; gap: 14px; }
-  textarea { width: min(560px, 100%); height: 90px; font: 16px Arial, sans-serif; padding: 10px; box-sizing: border-box; }
-  .row { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; justify-content: center; }
-  button { font: 16px Arial, sans-serif; padding: 10px 20px; cursor: pointer; }
-  canvas { width: min(560px, 100%); height: auto; aspect-ratio: 1; background: #fff; box-shadow: 0 1px 6px rgba(0,0,0,.25); }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Brat Image</title>
+  <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <textarea id="txt" placeholder="ketik teks di sini...">brat</textarea>
-  <div class="row">
-    <label><input type="checkbox" id="lower" checked> huruf kecil semua</label>
-    <button id="dl">Download PNG</button>
-  </div>
+  <button id="dl">Download PNG</button>
   <canvas id="cv" width="1000" height="1000"></canvas>
 
-<script>
-const SIZE = 1000, MARGIN = 80, FONT = '"Arial Narrow", Arial, sans-serif', LINE_H = 1.1;
-const cv = document.getElementById('cv'), ctx = cv.getContext('2d');
-const txt = document.getElementById('txt'), lower = document.getElementById('lower');
-
-function wrap(text, size) {
-  ctx.font = size + 'px ' + FONT;
-  const maxW = SIZE - MARGIN * 2, lines = [];
-  for (const para of text.split('\n')) {
-    let line = '';
-    for (const word of para.split(/\s+/).filter(Boolean)) {
-      const test = line ? line + ' ' + word : word;
-      if (line && ctx.measureText(test).width > maxW) { lines.push(line); line = word; }
-      else line = test;
-    }
-    lines.push(line);
-  }
-  return lines;
-}
-
-function fits(lines, size) {
-  ctx.font = size + 'px ' + FONT;
-  const maxW = SIZE - MARGIN * 2, maxH = SIZE - MARGIN * 2;
-  return lines.length * size * LINE_H <= maxH &&
-         lines.every(l => ctx.measureText(l).width <= maxW);
-}
-
-function render() {
-  let text = txt.value.trim();
-  if (lower.checked) text = text.toLowerCase();
-  ctx.fillStyle = '#fff';
-  ctx.fillRect(0, 0, SIZE, SIZE);
-  if (!text) return;
-
-  let lo = 8, hi = 500, best = lo;
-  while (lo <= hi) {
-    const mid = (lo + hi) >> 1;
-    if (fits(wrap(text, mid), mid)) { best = mid; lo = mid + 1; }
-    else hi = mid - 1;
-  }
-  const lines = wrap(text, best);
-  ctx.font = best + 'px ' + FONT;
-  ctx.fillStyle = '#000';
-  ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
-  const lh = best * LINE_H, top = (SIZE - lines.length * lh) / 2 + lh / 2;
-  lines.forEach((l, i) => ctx.fillText(l, SIZE / 2, top + i * lh));
-}
-
-document.getElementById('dl').onclick = () => {
-  cv.toBlob(b => {
-    const a = document.createElement('a');
-    const slug = txt.value.trim().toLowerCase().replace(/[^a-z0-9]+/g, '-').slice(0, 30) || 'brat';
-    a.href = URL.createObjectURL(b);
-    a.download = slug + '.png';
-    a.click();
-    URL.revokeObjectURL(a.href);
-  }, 'image/png');
-};
-
-txt.addEventListener('input', render);
-lower.addEventListener('change', render);
-render();
-</script>
+  <!-- urutan penting: config, layout, renderer, exporter, app -->
+  <script src="js/config.js"></script>
+  <script src="js/layout.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/exporter.js"></script>
+  <script src="js/app.js"></script>
 </body>
 </html>

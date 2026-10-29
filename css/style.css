@@ -1,0 +1,33 @@
+body {
+  margin: 0;
+  padding: 24px;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+textarea {
+  width: min(560px, 100%);
+  height: 90px;
+  font: 16px Arial, sans-serif;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+button {
+  font: 16px Arial, sans-serif;
+  padding: 10px 20px;
+  cursor: pointer;
+}
+
+canvas {
+  width: min(560px, 100%);
+  height: auto;
+  aspect-ratio: 1;
+  background: #fff;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, .25);
+}
