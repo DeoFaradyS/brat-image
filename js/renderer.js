@@ -2,11 +2,14 @@
 window.Brat = window.Brat || {};
 
 Brat.renderer = (() => {
-  const { size, margin, font, lineHeight, background, color, justifyLast } = Brat.config;
+  const { size, margin, font, lineHeight, background, color, justifyLast } =
+    Brat.config;
   const boxSize = size - margin * 2;
 
   // Justify: renggangkan spasi antar kata. Satu kata: tengah (tidak ada spasi untuk direnggangkan).
   // Baris terakhir ikut justify kalau config.justifyLast = true.
+  // Justify: renggangkan spasi antar kata. Baris satu kata: renggangkan antar huruf.
+    // Justify: renggangkan spasi antar kata. Satu kata: tengah.
   function drawLine(ctx, line, y) {
     const words = line.text.split(' ');
     if ((line.last && !justifyLast) || words.length < 2) {
@@ -14,6 +17,7 @@ Brat.renderer = (() => {
       ctx.fillText(line.text, size / 2, y);
       return;
     }
+
     ctx.textAlign = 'left';
     const wordsWidth = words.reduce((sum, w) => sum + ctx.measureText(w).width, 0);
     const gap = (boxSize - wordsWidth) / (words.length - 1);
@@ -25,7 +29,7 @@ Brat.renderer = (() => {
   }
 
   function render(canvas, rawText) {
-    const ctx = canvas.getContext('2d');
+    const ctx = canvas.getContext("2d");
     ctx.fillStyle = background;
     ctx.fillRect(0, 0, size, size);
 
@@ -38,7 +42,7 @@ Brat.renderer = (() => {
 
     ctx.font = `${fontSize}px ${font}`;
     ctx.fillStyle = color;
-    ctx.textBaseline = 'middle';
+    ctx.textBaseline = "middle";
     lines.forEach((line, i) => drawLine(ctx, line, top + i * lh));
   }
 
