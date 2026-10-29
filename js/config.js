@@ -10,4 +10,5 @@ Brat.config = {
   maxFont: 500,
   background: '#fff',
   color: '#000',
+  justifyLast: true,   // true = baris terakhir juga di-justify
 };

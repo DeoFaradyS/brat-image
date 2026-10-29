@@ -2,13 +2,14 @@
 window.Brat = window.Brat || {};
 
 Brat.renderer = (() => {
-  const { size, margin, font, lineHeight, background, color } = Brat.config;
+  const { size, margin, font, lineHeight, background, color, justifyLast } = Brat.config;
   const boxSize = size - margin * 2;
 
-  // Justify: renggangkan spasi antar kata. Baris terakhir / satu kata: tengah.
+  // Justify: renggangkan spasi antar kata. Satu kata: tengah (tidak ada spasi untuk direnggangkan).
+  // Baris terakhir ikut justify kalau config.justifyLast = true.
   function drawLine(ctx, line, y) {
     const words = line.text.split(' ');
-    if (line.last || words.length < 2) {
+    if ((line.last && !justifyLast) || words.length < 2) {
       ctx.textAlign = 'center';
       ctx.fillText(line.text, size / 2, y);
       return;
